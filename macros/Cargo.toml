@@ -1,0 +1,20 @@
+[package]
+name = "enums-macros"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+proc-macro = true
+
+[dependencies.syn]
+version = "2"
+features = ["full"]
+
+[dependencies.proc-macro2]
+version = "1"
+
+[dependencies.quote]
+version = "1"
+
+[dependencies.heck]
+version = "0.4"
