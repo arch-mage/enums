@@ -44,6 +44,30 @@
 /// assert_eq!(Kebab::ThatIs.name(), "that-is");
 /// ```
 ///
+/// Back conversion.
+///
+/// ```
+/// #[derive(Debug, Eq, PartialEq)]
+/// #[enums::name(case = "kebab")]
+/// enum Kebab {
+///     ThisIs,
+///     ThatIs,
+/// }
+///
+/// assert_eq!("this-is".parse(), Ok(Kebab::ThisIs));
+/// assert_eq!("that-is".parse(), Ok(Kebab::ThatIs));
+///
+/// #[derive(Debug, Eq, PartialEq)]
+/// #[enums::name(case = "lower-camel")]
+/// enum LowerCamel {
+///     ThisIs,
+///     ThatIs,
+/// }
+///
+/// assert_eq!("thisIs".parse(), Ok(LowerCamel::ThisIs));
+/// assert_eq!("thatIs".parse(), Ok(LowerCamel::ThatIs));
+/// ```
+///
 /// Available case conversion:
 ///  - kebab
 ///  - snake

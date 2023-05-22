@@ -50,6 +50,28 @@ fn name_(
         }
     });
 
+    let variant_from = tokens.variants.iter().map(|variant| {
+        let ident = &variant.ident;
+        let variant = match case {
+            None => ident.to_string(),
+            Some(case) => match case {
+                Case::Snake => ident.to_string().to_snake_case(),
+                Case::Kebab => ident.to_string().to_kebab_case(),
+                Case::Title => ident.to_string().to_title_case(),
+                Case::Train => ident.to_string().to_train_case(),
+                Case::LowerCamel => ident.to_string().to_lower_camel_case(),
+                Case::UpperCamel => ident.to_string().to_upper_camel_case(),
+                Case::ShoutySnake => ident.to_string().to_shouty_snake_case(),
+                Case::ShoutyKebab => ident.to_string().to_shouty_kebab_case(),
+            },
+        };
+        let lit = syn::LitStr::new(variant.as_str(), ident.span());
+
+        quote::quote! {
+            #lit => ::std::result::Result::Ok(#name::#ident),
+        }
+    });
+
     Ok(quote::quote! {
         #tokens
 
@@ -58,6 +80,17 @@ fn name_(
             #vis const fn name(&self) -> &'static str {
                 match self {
                     #(#variants)*
+                }
+            }
+        }
+
+        impl ::std::str::FromStr for #name {
+            type Err = ();
+
+            fn from_str(s: &str) -> ::std::result::Result<Self, Self::Err> {
+                match s {
+                    #(#variant_from)*
+                    _ => Err(())
                 }
             }
         }
